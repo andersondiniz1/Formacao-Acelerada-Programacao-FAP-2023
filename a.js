@@ -57,9 +57,11 @@
 //         break;
 // }
 
+const readline = require("readline-sync");
+
 var Numero1 = 10;
 var Numero2 = 20;
-var operacao = "divisão";
+var operacao = readline.question("readline-syanc");
 
 switch (operacao) {
     case "soma":
