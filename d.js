@@ -73,26 +73,56 @@
 
 
 
-var senha2 = 1;
-var tentativa = 0;
-while (senha2 === 1){
-    let readlineSync = require('readline-sync');
-    let senha = readlineSync.question('Digite a senha: '); 
-    senha = parseInt(senha); // Converter a senha para número usando parseInt()
+// var senha2 = 1;
+// var tentativa = 0;
+// while (senha2 === 1){
+//     let readlineSync = require('readline-sync');
+//     let senha = readlineSync.question('Digite a senha: '); 
+//     senha = parseInt(senha); // Converter a senha para número usando parseInt()
 
-        if (senha === 123){
-            console.log("Senha correta");
-            senha2 = senha2 + 1;
-            break;
-        }
+//         if (senha === 123){
+//             console.log("Senha correta");
+//             senha2 = senha2 + 1;
+//             break;
+//         }
 
-        else if (tentativa === 3) {
-            console.log("Senha incorreta, tente mais tarde");
-            break;
-        }
+//         else if (tentativa === 3) {
+//             console.log("Senha incorreta, tente mais tarde");
+//             break;
+//         }
 
-        else if (senha != 123){
-            tentativa = tentativa + 1;
-            console.log("Senha incorreta, tentativas:", tentativa);
-        }
-}
+//         else if (senha != 123){
+//             tentativa = tentativa + 1;
+//             console.log("Senha incorreta, tentativas:", tentativa);
+//         }
+// }
+
+// let x = 1;
+// do {
+//     console.log(x)
+//     x = x + 1;
+// } while (x < 11);
+
+// let x = 1;
+// do {
+//     console.log("+ 1 =", x)
+//     x = x + 1;
+// } while (x < 101);
+
+// let x = 1;
+// do {
+//     console.log(x)
+//     x = x * 2;
+// } while (x < 1000);
+
+// for (let i = 1; i < 10; i++){
+// console.log(i)
+// }
+
+// for (let i = 1; i < 100; i = i * 2){
+//     console.log(i)
+// }
+
+// for (let i = 10; i > 0; i = i - 2){
+//     console.log(i)
+//     }
