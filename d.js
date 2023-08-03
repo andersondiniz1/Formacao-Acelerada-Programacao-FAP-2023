@@ -73,24 +73,26 @@
 
 
 
-let senha2 = false;
-var senha = 'aluno';
-let tentativa = 0;
+var senha2 = 1;
+var tentativa = 0;
+while (senha2 === 1){
+    let readlineSync = require('readline-sync');
+    let senha = readlineSync.question('Digite a senha: '); 
+    senha = parseInt(senha); // Converter a senha para número usando parseInt()
 
-while (senha2 = false){
-        if (senha = 'aluno'){
-            console.log("Senha correta")
-            senha2 = true;
+        if (senha === 123){
+            console.log("Senha correta");
+            senha2 = senha2 + 1;
             break;
         }
 
-        else if (senha != 'aluno'){
-            console.log("Senha incorreta");
-            tentativa = tentativa + 1;
-        }
-
-        else if (tentativa = 3) {
+        else if (tentativa === 3) {
             console.log("Senha incorreta, tente mais tarde");
             break;
+        }
+
+        else if (senha != 123){
+            tentativa = tentativa + 1;
+            console.log("Senha incorreta, tentativas:", tentativa);
         }
 }
