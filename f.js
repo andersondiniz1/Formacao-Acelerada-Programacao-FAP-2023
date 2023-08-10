@@ -92,16 +92,55 @@
 // mensagemPersonalizada("Texto em itálico.", "italico");
 // mensagemPersonalizada("Texto com estilo desconhecido.", "sublinhado");
 //or
-function mensagemPersonalizada(texto, estilo = "normal") {
-    const estilos = {
-        "normal": "",
-        "negrito": "font-weight: bold;",
-        "italico": "font-style: italic;"
-    };
+// function mensagemPersonalizada(texto, estilo = "normal") {
+//     const estilos = {
+//         "normal": "",
+//         "negrito": "font-weight: bold;",
+//         "italico": "font-style: italic;"
+//     };
 
-    console.log(`%c${texto}`, estilos[estilo]);
-}
-mensagemPersonalizada("Olá, mundo!");
-mensagemPersonalizada("Texto em negrito.", "negrito");
-mensagemPersonalizada("Texto em itálico.", "italico");
-mensagemPersonalizada("Texto com estilo desconhecido.", "sublinhado");
+//     console.log(`%c${texto}`, estilos[estilo]);
+// }
+// mensagemPersonalizada("Olá, mundo!");
+// mensagemPersonalizada("Texto em negrito.", "negrito");
+// mensagemPersonalizada("Texto em itálico.", "italico");
+// mensagemPersonalizada("Texto com estilo desconhecido.", "sublinhado");
+
+// function teste(saudacao = "Olá", nome = "Anderson") {
+//     const mensagem = `${saudacao}, ${nome}`;
+//     return mensagem;
+// }
+// console.log(teste("Eae", "João")); 
+// console.log(teste());    
+
+// function operacao(num1, num2){
+//     const soma = num1 + num2;
+//     return soma;
+// }
+// console.log(operacao(2,2));
+
+// function ehPar(numero) {
+//     return numero % 2 === 0;
+// }
+// console.log(ehPar(4)); // Saída: true
+// console.log(ehPar(7)); // Saída: false
+
+// function maiorNumero(num1, num2, num3){
+//     return Math.max(num1, num2, num3);
+// }
+// console.log(maiorNumero(3,4,5)); // Saída: 5
+
+// function calcularIMC(peso, altura) {
+//     const imc = peso / (altura * altura);
+//     return imc;
+// }
+// console.log(calcularIMC(70, 1.75)); // Saída: 22.86
+// console.log(calcularIMC(85, 1.80)); // Saída: 26.23
+
+// function celsiusParaFahrenheit(celsius) {
+//     const fahrenheit = (celsius * 9/5) + 32;
+//     return fahrenheit;
+// }
+// console.log(celsiusParaFahrenheit(0));    // Saída: 32 (0°C em Fahrenheit)
+// console.log(celsiusParaFahrenheit(25));   // Saída: 77 (25°C em Fahrenheit)
+// console.log(celsiusParaFahrenheit(-10))
