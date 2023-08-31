@@ -76,5 +76,104 @@
 // console.log("Soma usando do-while:", somaDoWhile);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Faça um programa em javascript que receba do usuario um numero N e depois imprima os N primeiros
+// numeros naturais impares.
+
+// let readlineSync = require('readline-sync');
+// const N = parseFloat(readlineSync.question('Digite o número: '));
+
+// // Inicializa uma variável para contar os números ímpares
+// let count = 0;
+
+// // Inicializa uma variável para armazenar o número atual
+// let currentNumber = 1;
+
+// // Loop para imprimir os N primeiros números naturais ímpares
+// while (count < N) {
+//     if (currentNumber % 2 !== 0) {
+//         console.log(currentNumber);
+//         count++;
+//     }
+//     currentNumber++;
+// }
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+// uma empresa contrata um ncanador a R$ 30,00 por dia. Crie um programa que solicite o numero 
+// de dias trabalhados pelo encanador e imprima a quantidade liquida ue devera ser paga, 
+// sabendo-se que são descontados 8% para pagamento de impostos e taxas devidas
+
+// // Solicita ao usuário o número de dias trabalhados
+// let readlineSync = require('readline-sync');
+// const input = parseFloat(readlineSync.question("Digite o número de dias trabalhados:"));
+
+// // Verifica se o input é um número válido
+// if (!isNaN(input)) {
+//     const diasTrabalhados = parseInt(input);
+
+//     // Valor do pagamento por dia
+//     const valorPorDia = 30.00;
+
+//     // Taxa de desconto para impostos e taxas
+//     const taxaDesconto = 0.08;
+
+//     // Cálculo do valor bruto
+//     const valorBruto = diasTrabalhados * valorPorDia;
+
+//     // Cálculo do valor descontado
+//     const valorDescontado = valorBruto * taxaDesconto;
+
+//     // Cálculo do valor líquido
+//     const valorLiquido = valorBruto - valorDescontado;
+
+//     // Imprime o valor líquido a ser pago
+//     console.log(`Valor líquido a ser pago: R$ ${valorLiquido.toFixed(2)}`);
+// } else {
+//     console.log("Por favor, digite um número válido.");
+// }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Faça um programa para ler um horario (hora:minuto:segundo) de inicio e a duração, 
+// em segundos, de uma biolgica. O programa deve informar o horario (hora:minuto:segundo) de 
+// termino da mesma.
+
+// const readline = require('readline-sync');
+// const horarioInicio = readline.question("Digite o horário de início (HH:MM:SS):");
+// let horas = horarioInicio.split(":");
+
+// console.log(horas);
+
+// let duracao = 23; // ou qualquer outra duração em horas
+// horas[1] = parseInt(horas[1]) + duracao;
+
+// console.log(horas[0]);
+// console.log(horas[1]);
+// console.log(horas[2]);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Uma empresa paga R$ 10,00 por hora normal trabalhada e R$ 15,00 por hora extra.
+// Escreva um programa que leia o total de horas normais e o total de horas extras
+// trabalhadas por um empregado em um ano e calcule o salario anual deste trabalhador.
+
+// const readline = require('readline-sync');
+
+// // Solicita ao usuário o total de horas normais e horas extras
+// const totalHorasNormais = parseFloat(readline.question("Digite o total de horas normais trabalhadas no ano:"));
+// const totalHorasExtras = parseFloat(readline.question("Digite o total de horas extras trabalhadas no ano:"));
+
+// // Valor pago por hora normal e por hora extra
+// const valorHoraNormal = 10.00;
+// const valorHoraExtra = 15.00;
+
+// // Calcula o salário anual
+// const salarioAnual = (totalHorasNormais * valorHoraNormal) + (totalHorasExtras * valorHoraExtra);
+
+// // Imprime o salário anual
+// console.log(`O salário anual do trabalhador é R$ ${salarioAnual.toFixed(2)}`);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 
 
