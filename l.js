@@ -146,53 +146,86 @@ while (loop) {
             console.log("=====================================");
             console.log("");
             break;
-        case 5:
-            console.log("\nBuscar um aluno:");
-            console.log("=====================================");
-                
-            const busca = readline.question("Digite o nome ou a matrícula do aluno que deseja buscar: ");
-            const alunoEncontrado = alunos.find(aluno => aluno.nome === busca || aluno.matricula === Number(busca));
-                
-            if (alunoEncontrado) {
-                console.log("\nAluno encontrado:");
-                console.log(`Matrícula: ${alunoEncontrado.matricula}`);
-                console.log(`Nome: ${alunoEncontrado.nome}`);
-                console.log(`Notas: ${alunoEncontrado.notas}`);
-                    
-                const confirmacao1 = readline.keyInYN("Tem certeza que deseja realmente excluir este aluno? (Y/N): ");
-
-                if (confirmacao1) {
-                    const confirmacao2 = readline.keyInYN("Tem certeza absoluta que deseja excluir este aluno? (Y/N): ");
-                    
-                    if (confirmacao2) {
-                        // Encontra o índice do aluno no array
-                        const indiceAluno = alunos.indexOf(alunoEncontrado);
-                        // Remove o aluno do array
-                        alunos.splice(indiceAluno, 1);
-                        console.log("\nAluno excluído com sucesso!");
-                    } else {
-                        console.log("\nOperação de exclusão cancelada.");
+            case 5: 
+                console.log("\nBuscar um aluno:");
+                console.log("=====================================");
+            
+                const busca = readline.question("Digite o nome ou a matrícula do aluno que deseja buscar: ");
+                const alunoEncontrado = alunos.find(
+                    aluno => aluno.nome === busca || aluno.matricula === Number(busca)
+                );
+            
+                if (alunoEncontrado) {
+                    console.log("\nAluno encontrado:");
+                    console.log(`Matrícula: ${alunoEncontrado.matricula}`);
+                    console.log(`Nome: ${alunoEncontrado.nome}`);
+                    console.log(`Notas: ${alunoEncontrado.notas}`);
+            
+                    const opcao = readline.keyInSelect(
+                        ["Alterar dados do aluno", "Excluir aluno", "Cancelar"],
+                        "Escolha o que deseja fazer:"
+                    );                    
+            
+                    switch (opcao) {
+                        case 0:
+                            const novoNome = readline.question("Digite o novo nome do aluno (ou deixe em branco para manter o mesmo): ");
+                            if (novoNome) {
+                                alunoEncontrado.nome = novoNome;
+                            }
+            
+                            const alterarNotas = readline.keyInYN("Deseja alterar as notas do aluno? (Y/N): ");
+                            if (alterarNotas) {
+                                console.log("\nAlterar notas do aluno:");
+                                for (let i = 0; i < alunoEncontrado.notas.length; i++) {
+                                    const novaNota = readline.questionFloat(`Digite a nova nota ${i + 1}: `);
+                                    alunoEncontrado.notas[i] = novaNota;
+                                }
+                            }
+            
+                            const novaMatricula = readline.questionInt("Digite a nova matrícula do aluno (ou digite 0 para manter a mesma): ");
+                            if (novaMatricula !== 0) {
+                                alunoEncontrado.matricula = novaMatricula;
+                            }
+            
+                            console.log("\nDados do aluno alterados com sucesso!");
+                            break;
+                        case 1:
+                            const confirmacao = readline.keyInYN("Tem certeza que deseja realmente excluir este aluno? (Y/N): ");
+                            if (confirmacao) {
+                                // Encontra o índice do aluno no array
+                                const indiceAluno = alunos.indexOf(alunoEncontrado);
+                                // Remove o aluno do array
+                                alunos.splice(indiceAluno, 1);
+                                console.log("\nAluno excluído com sucesso!");
+                            } else {
+                                console.log("\nOperação de exclusão cancelada.");
+                            }
+                            break;
+                        case 2:
+                            console.log("\nOperação cancelada.");
+                            break;
+                        default:
+                            console.log("\nOpção inválida.");
+                            break;
                     }
                 } else {
-                    console.log("\nOperação de exclusão cancelada.");
+                    console.log("\nAluno não encontrado.");
                 }
-            } else {
-                console.log("\nAluno não encontrado.");
-            }
-                
-            console.log("");
-            console.log("=====================================");
-            console.log("======== CADASTRO DE ALUNOS =========");
-            console.log("=============== MENU ================");
-            console.log("1 - Listar todos os alunos detalhadamente.");
-            console.log("2 - Listar apenas os nomes dos alunos.");
-            console.log("3 - Listar apenas média dos alunos.");
-            console.log("4 - Cadastrar novo aluno.");
-            console.log("5 - Buscar e excluir um aluno.");
-            console.log("0 - Sair do sistema.");
-            console.log("=====================================");
-            console.log("");
-            break;           
+            
+                console.log("");
+                console.log("=====================================");
+                console.log("======== CADASTRO DE ALUNOS =========");
+                console.log("=============== MENU ================");
+                console.log("1 - Listar todos os alunos detalhadamente");
+                console.log("2 - Listar apenas os nomes dos alunos");
+                console.log("3 - Listar apenas média dos alunos");
+                console.log("4 - Cadastrar novo aluno");
+                console.log("5 - Buscar, alterar ou excluir um aluno");
+                console.log("0 - Sair do sistema.");
+                console.log("=====================================");
+                console.log("");
+                break;
+            
         case 0:
             console.log("\nSaindo do sistema...");
             loop = false;
