@@ -1,19 +1,25 @@
 const readline = require("readline-sync");
 
+let matricula = 1; // Inicializa a matrícula com 1
+
 // Definição dos alunos
 const aluno1 = {
+    matricula: matricula++,
     nome: "Anderson",
     notas: [8, 7, 6],
 };
 const aluno2 = {
+    matricula: matricula++,
     nome: "Paulo",
     notas: [5, 9.5, 3],
 };
 const aluno3 = {
+    matricula: matricula++,
     nome: "Leandro",
     notas: [4, 2, 7],
 };
 const aluno4 = {
+    matricula: matricula++,
     nome: "Jorge",
     notas: [10, 4.5, 9],
 };
@@ -28,6 +34,7 @@ console.log("1 - Listar todos os alunos detalhadamente.");
 console.log("2 - Listar apenas os nomes dos alunos.");
 console.log("3 - Listar apenas média dos alunos.");
 console.log("4 - Cadastrar novo aluno.");
+console.log("5 - Buscar ou excluir um aluno");
 console.log("0 - Sair do sistema.");
 console.log("=====================================");
 
@@ -40,6 +47,7 @@ while (loop) {
             console.log("\nListando todos os alunos detalhadamente:");
             console.log("=====================================");
             for (const aluno of alunos) {
+                console.log(`Matrícula: ${aluno.matricula}`);
                 console.log(`Nome: ${aluno.nome}`);
                 console.log(`Notas: ${aluno.notas}`);
                 for (let i = 0; i < aluno.notas.length; i++) {
@@ -51,10 +59,11 @@ while (loop) {
             console.log("=====================================");
             console.log("======== CADASTRO DE ALUNOS =========");
             console.log("=============== MENU ================");
-            console.log("1 - Listar todos os alunos detalhadamente");
-            console.log("2 - Listar apenas os nomes dos alunos");
-            console.log("3 - Listar apenas média dos alunos");
-            console.log("4 - Cadastrar novo aluno");
+            console.log("1 - Listar todos os alunos detalhadamente.");
+            console.log("2 - Listar apenas os nomes dos alunos.");
+            console.log("3 - Listar apenas média dos alunos.");
+            console.log("4 - Cadastrar novo aluno.");
+            console.log("5 - Buscar ou excluir um aluno.");
             console.log("0 - Sair do sistema.");
             console.log("=====================================");
             console.log("");
@@ -63,16 +72,18 @@ while (loop) {
             console.log("\nListando apenas os nomes dos alunos:");
             console.log("=====================================");
             for (const aluno of alunos) {
+                console.log(`Matrícula: ${aluno.matricula}`);
                 console.log(`Nome: ${aluno.nome}`);
             }
             console.log("");
             console.log("=====================================");
             console.log("======== CADASTRO DE ALUNOS =========");
             console.log("=============== MENU ================");
-            console.log("1 - Listar todos os alunos detalhadamente");
-            console.log("2 - Listar apenas os nomes dos alunos");
-            console.log("3 - Listar apenas média dos alunos");
-            console.log("4 - Cadastrar novo aluno");
+            console.log("1 - Listar todos os alunos detalhadament.");
+            console.log("2 - Listar apenas os nomes dos alunos.");
+            console.log("3 - Listar apenas média dos alunos.");
+            console.log("4 - Cadastrar novo aluno.");
+            console.log("5 - Buscar ou excluir um aluno.");
             console.log("0 - Sair do sistema.");
             console.log("=====================================");
             console.log("");
@@ -84,6 +95,7 @@ while (loop) {
             for (const aluno of alunos) {
                 const media = aluno.notas.reduce((total, nota) => total + nota) / aluno.notas.length;
             
+                console.log(`Matrícula: ${aluno.matricula}`);
                 console.log(`Nome: ${aluno.nome}`);
                 console.log(`Média: ${media.toFixed(2)}`); // Arredonda a média para 2 casas decimais
                 console.log("=====================================");
@@ -91,10 +103,11 @@ while (loop) {
             console.log("");
             console.log("======== CADASTRO DE ALUNOS =========");
             console.log("=============== MENU ================");
-            console.log("1 - Listar todos os alunos detalhadamente");
-            console.log("2 - Listar apenas os nomes dos alunos");
-            console.log("3 - Listar apenas média dos alunos");
-            console.log("4 - Cadastrar novo aluno");
+            console.log("1 - Listar todos os alunos detalhadamente.");
+            console.log("2 - Listar apenas os nomes dos alunos.");
+            console.log("3 - Listar apenas média dos alunos.");
+            console.log("4 - Cadastrar novo aluno.");
+            console.log("5 - Buscar ou excluir um aluno.");
             console.log("0 - Sair do sistema.");
             console.log("=====================================");
             console.log("");
@@ -112,6 +125,7 @@ while (loop) {
             }
             
             const novoAluno = {
+                matricula: matricula++, // Incrementa a matrícula e atribui ao novo aluno
                 nome: nomeAluno,
                 notas: notasAluno,
             };
@@ -123,19 +137,67 @@ while (loop) {
             console.log("=====================================");
             console.log("======== CADASTRO DE ALUNOS =========");
             console.log("=============== MENU ================");
-            console.log("1 - Listar todos os alunos detalhadamente");
-            console.log("2 - Listar apenas os nomes dos alunos");
-            console.log("3 - Listar apenas média dos alunos");
-            console.log("4 - Cadastrar novo aluno");
+            console.log("1 - Listar todos os alunos detalhadamente.");
+            console.log("2 - Listar apenas os nomes dos alunos.");
+            console.log("3 - Listar apenas média dos alunos.");
+            console.log("4 - Cadastrar novo aluno.");
+            console.log("5 - Buscar ou excluir um aluno.");
             console.log("0 - Sair do sistema.");
             console.log("=====================================");
             console.log("");
             break;
+        case 5:
+            console.log("\nBuscar um aluno:");
+            console.log("=====================================");
+                
+            const busca = readline.question("Digite o nome ou a matrícula do aluno que deseja buscar: ");
+            const alunoEncontrado = alunos.find(aluno => aluno.nome === busca || aluno.matricula === Number(busca));
+                
+            if (alunoEncontrado) {
+                console.log("\nAluno encontrado:");
+                console.log(`Matrícula: ${alunoEncontrado.matricula}`);
+                console.log(`Nome: ${alunoEncontrado.nome}`);
+                console.log(`Notas: ${alunoEncontrado.notas}`);
+                    
+                const confirmacao1 = readline.keyInYN("Tem certeza que deseja realmente excluir este aluno? (Y/N): ");
+
+                if (confirmacao1) {
+                    const confirmacao2 = readline.keyInYN("Tem certeza absoluta que deseja excluir este aluno? (Y/N): ");
+                    
+                    if (confirmacao2) {
+                        // Encontra o índice do aluno no array
+                        const indiceAluno = alunos.indexOf(alunoEncontrado);
+                        // Remove o aluno do array
+                        alunos.splice(indiceAluno, 1);
+                        console.log("\nAluno excluído com sucesso!");
+                    } else {
+                        console.log("\nOperação de exclusão cancelada.");
+                    }
+                } else {
+                    console.log("\nOperação de exclusão cancelada.");
+                }
+            } else {
+                console.log("\nAluno não encontrado.");
+            }
+                
+            console.log("");
+            console.log("=====================================");
+            console.log("======== CADASTRO DE ALUNOS =========");
+            console.log("=============== MENU ================");
+            console.log("1 - Listar todos os alunos detalhadamente.");
+            console.log("2 - Listar apenas os nomes dos alunos.");
+            console.log("3 - Listar apenas média dos alunos.");
+            console.log("4 - Cadastrar novo aluno.");
+            console.log("5 - Buscar e excluir um aluno.");
+            console.log("0 - Sair do sistema.");
+            console.log("=====================================");
+            console.log("");
+            break;           
         case 0:
             console.log("\nSaindo do sistema...");
             loop = false;
             break;
-        
+        default:
             console.log("\nOpção inválida!");
             break;
     }
