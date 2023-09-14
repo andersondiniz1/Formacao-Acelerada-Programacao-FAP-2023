@@ -10,6 +10,32 @@ class Cliente {
     this.transacoes = [];
   }
 
+  sacar(valor) {
+    if (!validarValor(valor)) {
+      console.log("Valor de saque inválido.");
+      return;
+    }
+
+    if (valor <= this.saldo) {
+      this.saldo -= valor;
+      this.transacoes.push(`Saque de R$ ${valor.toFixed(2)}`);
+      console.log(`Saque de R$ ${valor.toFixed(2)} realizado com sucesso.`);
+    } else {
+      console.log("Saldo insuficiente.");
+    }
+  }
+
+  depositar(valor) {
+    if (!validarValor(valor)) {
+      console.log("Valor de depósito inválido.");
+      return;
+    }
+
+    this.saldo += valor;
+    this.transacoes.push(`Depósito de R$ ${valor.toFixed(2)}`);
+    console.log(`Depósito de R$ ${valor.toFixed(2)} realizado com sucesso.`);
+  }
+
   gerarContaAleatoria() {
     const numeroConta = Math.floor(10000 + Math.random() * 90000);
     return numeroConta.toString().slice(0, 4) + "-" + numeroConta.toString().slice(-1);
