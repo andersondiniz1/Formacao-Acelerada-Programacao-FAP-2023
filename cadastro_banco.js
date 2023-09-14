@@ -30,13 +30,29 @@ class Cliente {
   }
 
   sacar(valor) {
-    if (valor > 0 && valor <= this.saldo) {
+    if (!validarValor(valor)) {
+      console.log("Valor de saque inválido.");
+      return;
+    }
+
+    if (valor <= this.saldo) {
       this.saldo -= valor;
       this.transacoes.push(`Saque de R$ ${valor.toFixed(2)}`);
       console.log(`Saque de R$ ${valor.toFixed(2)} realizado com sucesso.`);
     } else {
-      console.log("Valor de saque inválido ou saldo insuficiente.");
+      console.log("Saldo insuficiente.");
     }
+  }
+
+  depositar(valor) {
+    if (!validarValor(valor)) {
+      console.log("Valor de depósito inválido.");
+      return;
+    }
+
+    this.saldo += valor;
+    this.transacoes.push(`Depósito de R$ ${valor.toFixed(2)}`);
+    console.log(`Depósito de R$ ${valor.toFixed(2)} realizado com sucesso.`);
   }
 
   listarTransacoes() {
@@ -60,19 +76,21 @@ function exibirMenu() {
   console.log("==========================");
 }
 
-// Função para validar se o nome contém apenas letras e espaços.
 function validarNome(nome) {
   return /^[A-Za-z\s]+$/.test(nome);
 }
 
-// Função para validar se o CPF contém 11 dígitos numéricos.
 function validarCPF(cpf) {
   return /^[0-9]{11}$/.test(cpf);
 }
 
-// Função para validar se o saldo é um número válido (positivo).
-function validarSaldo(saldo) {
-  return !isNaN(saldo) && saldo >= 0;
+// Função para validar se o valor é um número válido (positivo).
+function validarValor(valor) {
+  return !isNaN(valor) && valor > 0;
+}
+
+function excluirCliente(cpf) {
+  delete clientes[cpf];
 }
 
 function cadastrarCliente() {
@@ -80,7 +98,6 @@ function cadastrarCliente() {
   console.log("=== CADASTRAR CLIENTE ===");
   let nomeCliente = readline.question("Digite seu nome completo: ");
 
-  // Verifica se o nome é válido.
   while (!validarNome(nomeCliente)) {
     console.log("Nome inválido. Use apenas letras e espaços.");
     nomeCliente = readline.question("Digite seu nome completo: ");
@@ -88,21 +105,19 @@ function cadastrarCliente() {
 
   let cpfCliente = readline.question("Digite seu CPF (11 dígitos numéricos): ");
 
-  // Verifica se o CPF é válido.
   while (!validarCPF(cpfCliente)) {
     console.log("CPF inválido. Deve conter 11 dígitos numéricos.");
     cpfCliente = readline.question("Digite seu CPF (11 dígitos numéricos): ");
   }
 
-  let saldoCliente = readline.questionFloat("Digite o saldo que deseja depositar: ");
+  let saldoCliente = readline.question("Digite o saldo que deseja depositar: ");
 
-  // Verifica se o saldo é válido.
-  while (!validarSaldo(saldoCliente)) {
+  while (!validarValor(saldoCliente)) {
     console.log("Saldo inválido. Deve ser um valor positivo.");
-    saldoCliente = readline.questionFloat("Digite o saldo que deseja depositar: ");
+    saldoCliente = readline.question("Digite o saldo que deseja depositar: ");
   }
 
-  const novoCliente = new Cliente(nomeCliente, cpfCliente, saldoCliente);
+  const novoCliente = new Cliente(nomeCliente, cpfCliente, parseFloat(saldoCliente));
   clientes[cpfCliente] = novoCliente;
   console.log("Cliente cadastrado com sucesso!");
   readline.keyInPause();
@@ -140,88 +155,65 @@ function listarClientes() {
 }
 
 function buscarCliente(clienteSelecionado) {
-  console.clear();
-  console.log("=== DETALHES DO CLIENTE ===");
-  console.log(`Nome: ${clienteSelecionado.nome}`);
-  console.log(`CPF: ${clienteSelecionado.formatarCPF()}`);
-  console.log(`Agência: ${clienteSelecionado.agencia}`);
-  console.log(`Conta: ${clienteSelecionado.conta}`);
-  console.log(`Saldo: R$ ${clienteSelecionado.saldo.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
-  console.log("============================");
-  console.log("Opções:");
-  console.log("1 - Sacar Dinheiro");
-  console.log("2 - Depositar Dinheiro");
-  console.log("3 - Ver Registro de Alterações");
-  console.log("4 - Excluir Cliente");
-  console.log("5 - Voltar ao menu principal");
+  let continua = true;
+  while (continua) {
+    console.clear();
+    console.log("=== DETALHES DO CLIENTE ===");
+    console.log(`Nome: ${clienteSelecionado.nome}`);
+    console.log(`CPF: ${clienteSelecionado.formatarCPF()}`);
+    console.log(`Agência: ${clienteSelecionado.agencia}`);
+    console.log(`Conta: ${clienteSelecionado.conta}`);
+    console.log(`Saldo: R$ ${clienteSelecionado.saldo.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+    console.log("============================");
+    console.log("Opções:");
+    console.log("1 - Sacar Dinheiro");
+    console.log("2 - Depositar Dinheiro");
+    console.log("3 - Ver Registro de Alterações");
+    console.log("4 - Excluir Cliente");
+    console.log("5 - Voltar ao menu principal");
 
-  let opcao = readline.questionInt("Escolha uma opção: ");
-  switch (opcao) {
-    case 1:
-      let valorSaque = readline.questionFloat("Digite o valor a sacar: ");
-      clienteSelecionado.sacar(valorSaque);
-      break;
-    case 2:
-      let valorDeposito = readline.questionFloat("Digite o valor a depositar: ");
-      clienteSelecionado.depositar(valorDeposito);
-      break;
-    case 3:
-      console.clear();
-      console.log("=== REGISTRO DE ALTERAÇÕES ===");
-      for (const transacao of clienteSelecionado.transacoes) {
-        console.log(transacao);
-      }
-      console.log("===============================");
-      readline.keyInPause();
-      break;
-    case 4:
-      if (confirmarExclusao()) {
-        excluirClientePorCPF(clienteSelecionado.cpf);
-        console.log("Cliente excluído com sucesso.");
+    let opcao = readline.questionInt("Escolha uma opção: ");
+    switch (opcao) {
+      case 1:
+        let valorSaque = readline.questionFloat("Digite o valor a sacar: ");
+        clienteSelecionado.sacar(valorSaque);
         readline.keyInPause();
-        return;
-      }
-      break;
-    case 5:
-      return;
-    default:
-      console.log("Opção inválida!");
+        break;
+      case 2:
+        let valorDeposito = readline.questionFloat("Digite o valor a depositar: ");
+        clienteSelecionado.depositar(valorDeposito);
+        readline.keyInPause();
+        break;
+      case 3:
+        console.clear();
+        console.log("=== REGISTRO DE ALTERAÇÕES ===");
+        for (const transacao of clienteSelecionado.transacoes) {
+          console.log(transacao);
+        }
+        console.log("===============================");
+        readline.keyInPause();
+        break;
+      case 4:
+        if (confirmarExclusao()) {
+          const cpfCliente = clienteSelecionado.cpf;
+          excluirCliente(cpfCliente);
+          console.log("Cliente excluído com sucesso.");
+          readline.keyInPause();
+          continua = false;
+        }
+        break;
+      case 5:
+        continua = false;
+        break;
+      default:
+        console.log("Opção inválida!");
+    }
   }
 }
 
 function confirmarExclusao() {
   const confirmacao = readline.keyInYN("Tem certeza de que deseja excluir o cliente? (S/N): ");
   return confirmacao;
-}
-
-function exibirDetalhesCliente(cliente) {
-  console.clear();
-  console.log("=== DETALHES DO CLIENTE ===");
-  console.log(`Nome: ${cliente.nome}`);
-  console.log(`CPF: ${cliente.formatarCPF()}`);
-  console.log(`Agência: ${cliente.agencia}`);
-  console.log(`Conta: ${cliente.conta}`);
-  console.log(`Saldo: R$ ${cliente.saldo.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
-  console.log("============================");
-  console.log("Opções:");
-  console.log("1 - Sacar Dinheiro");
-  console.log("2 - Depositar Dinheiro");
-  console.log("3 - Ver Registro de Alterações");
-  console.log("4 - Excluir Cliente");
-  console.log("5 - Voltar ao menu principal");
-}
-
-function clienteExistentePorNome(nome) {
-  for (const cpf in clientes) {
-    if (clientes[cpf].nome === nome) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function clienteExistentePorCPF(cpf) {
-  return !!clientes[cpf];
 }
 
 function main() {
@@ -237,7 +229,7 @@ function main() {
         cadastrarCliente();
         break;
       case 3:
-        buscarCliente();
+        listarClientes();
         break;
       case 0:
         console.log("Saindo do sistema...");
