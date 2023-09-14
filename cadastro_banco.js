@@ -45,42 +45,6 @@ class Cliente {
     return this.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
   }
 
-  depositar(valor) {
-    if (valor > 0) {
-      this.saldo += valor;
-      this.transacoes.push(`Depósito de R$ ${valor.toFixed(2)}`);
-      console.log(`Depósito de R$ ${valor.toFixed(2)} realizado com sucesso.`);
-    } else {
-      console.log("Valor de depósito inválido.");
-    }
-  }
-
-  sacar(valor) {
-    if (!validarValor(valor)) {
-      console.log("Valor de saque inválido.");
-      return;
-    }
-
-    if (valor <= this.saldo) {
-      this.saldo -= valor;
-      this.transacoes.push(`Saque de R$ ${valor.toFixed(2)}`);
-      console.log(`Saque de R$ ${valor.toFixed(2)} realizado com sucesso.`);
-    } else {
-      console.log("Saldo insuficiente.");
-    }
-  }
-
-  depositar(valor) {
-    if (!validarValor(valor)) {
-      console.log("Valor de depósito inválido.");
-      return;
-    }
-
-    this.saldo += valor;
-    this.transacoes.push(`Depósito de R$ ${valor.toFixed(2)}`);
-    console.log(`Depósito de R$ ${valor.toFixed(2)} realizado com sucesso.`);
-  }
-
   listarTransacoes() {
     console.log("Histórico de Transações:");
     for (const transacao of this.transacoes) {
@@ -110,7 +74,6 @@ function validarCPF(cpf) {
   return /^[0-9]{11}$/.test(cpf);
 }
 
-// Função para validar se o valor é um número válido (positivo).
 function validarValor(valor) {
   return !isNaN(valor) && valor > 0;
 }
@@ -136,14 +99,14 @@ function cadastrarCliente() {
     cpfCliente = readline.question("Digite seu CPF (11 dígitos numéricos): ");
   }
 
-  let saldoCliente = readline.question("Digite o saldo que deseja depositar: ");
+  let saldoCliente = parseFloat(readline.question("Digite o saldo que deseja depositar: "));
 
   while (!validarValor(saldoCliente)) {
     console.log("Saldo inválido. Deve ser um valor positivo.");
-    saldoCliente = readline.question("Digite o saldo que deseja depositar: ");
+    saldoCliente = parseFloat(readline.question("Digite o saldo que deseja depositar: "));
   }
 
-  const novoCliente = new Cliente(nomeCliente, cpfCliente, parseFloat(saldoCliente));
+  const novoCliente = new Cliente(nomeCliente, cpfCliente, saldoCliente);
   clientes[cpfCliente] = novoCliente;
   console.log("Cliente cadastrado com sucesso!");
   readline.keyInPause();
@@ -202,11 +165,19 @@ function buscarCliente(clienteSelecionado) {
     switch (opcao) {
       case 1:
         let valorSaque = parseFloat(readline.question("Digite o valor a sacar: "));
+        while (!validarValor(valorSaque)) {
+          console.log("Valor de saque inválido. Digite um número positivo.");
+          valorSaque = parseFloat(readline.question("Digite o valor a sacar: "));
+        }
         clienteSelecionado.sacar(valorSaque);
         readline.keyInPause();
         break;
       case 2:
         let valorDeposito = parseFloat(readline.question("Digite o valor a depositar: "));
+        while (!validarValor(valorDeposito)) {
+          console.log("Valor de depósito inválido. Digite um número positivo.");
+          valorDeposito = parseFloat(readline.question("Digite o valor a depositar: "));
+        }
         clienteSelecionado.depositar(valorDeposito);
         readline.keyInPause();
         break;
