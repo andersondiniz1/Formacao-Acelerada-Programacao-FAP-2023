@@ -175,12 +175,12 @@ function buscarCliente(clienteSelecionado) {
     let opcao = readline.questionInt("Escolha uma opção: ");
     switch (opcao) {
       case 1:
-        let valorSaque = readline.questionFloat("Digite o valor a sacar: ");
+        let valorSaque = parseFloat(readline.question("Digite o valor a sacar: "));
         clienteSelecionado.sacar(valorSaque);
         readline.keyInPause();
         break;
       case 2:
-        let valorDeposito = readline.questionFloat("Digite o valor a depositar: ");
+        let valorDeposito = parseFloat(readline.question("Digite o valor a depositar: "));
         clienteSelecionado.depositar(valorDeposito);
         readline.keyInPause();
         break;
