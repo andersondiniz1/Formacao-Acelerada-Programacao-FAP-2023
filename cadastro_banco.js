@@ -87,12 +87,29 @@ function cadastrarCliente() {
   console.log("=== CADASTRAR CLIENTE ===");
   let nomeCliente = readline.question("Digite seu nome completo: ");
 
+  // Verifica se o nome já existe na lista de clientes
+  for (const cpf in clientes) {
+    const cliente = clientes[cpf];
+    if (cliente.nome === nomeCliente) {
+      console.log("Cliente com o mesmo nome já cadastrado.");
+      readline.keyInPause();
+      return; // Sai da função sem cadastrar o cliente
+    }
+  }
+
   while (!validarNome(nomeCliente)) {
     console.log("Nome inválido. Use apenas letras e espaços.");
     nomeCliente = readline.question("Digite seu nome completo: ");
   }
 
   let cpfCliente = readline.question("Digite seu CPF (11 dígitos numéricos): ");
+
+  // Verifica se o CPF já existe na lista de clientes
+  if (clientes[cpfCliente]) {
+    console.log("Cliente com o mesmo CPF já cadastrado.");
+    readline.keyInPause();
+    return; // Sai da função sem cadastrar o cliente
+  }
 
   while (!validarCPF(cpfCliente)) {
     console.log("CPF inválido. Deve conter 11 dígitos numéricos.");
