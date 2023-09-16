@@ -182,6 +182,7 @@ class Banco {
         }
     }
 
+    // Dentro da classe Banco
     buscarPorCPF() {
         while (true) {
             console.clear();
@@ -195,8 +196,8 @@ class Banco {
             if (validarCPF(cpfBusca)) {
                 const clienteEncontrado = this.clientes.find(cliente => cliente.cpf === cpfBusca);
                 if (clienteEncontrado) {
-                    clienteEncontrado.exibirDados();
-                    return;
+                    exibirDetalhesCliente(clienteEncontrado, this.clientes);
+                    readline.keyInPause(); // Aguarde até que o usuário pressione uma tecla antes de retornar
                 } else {
                     console.log("Erro: Nenhum cliente encontrado com esse CPF.");
                     readline.keyInPause();
@@ -207,6 +208,7 @@ class Banco {
             }
         }
     }
+
 }
 
 function exibirDetalhesCliente(clienteSelecionado, clientes) {
