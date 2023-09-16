@@ -12,7 +12,7 @@ class Cliente {
 
     sacar(valor) {
         if (!validarValor(valor)) {
-            console.log("Valor de saque inválido.");
+            console.log("Erro: Valor de saque inválido. O valor deve ser numérico e maior que zero.");
             return;
         }
 
@@ -21,13 +21,13 @@ class Cliente {
             this.transacoes.push(`Saque de R$ ${valor.toFixed(2)}`);
             console.log(`Saque de R$ ${valor.toFixed(2)} realizado com sucesso.`);
         } else {
-            console.log("Saldo insuficiente.");
+            console.log("Erro: Saldo insuficiente para realizar o saque.");
         }
     }
 
     depositar(valor) {
         if (!validarValor(valor)) {
-            console.log("Valor de depósito inválido.");
+            console.log("Erro: Valor de depósito inválido. O valor deve ser numérico e maior que zero.");
             return;
         }
 
@@ -46,216 +46,170 @@ class Cliente {
     }
 
     listarTransacoes() {
+        console.log("")
         console.log("Histórico de Transações:");
+        console.log("")
         for (const transacao of this.transacoes) {
             console.log(transacao);
         }
     }
-}
 
-const clientes = [];
-
-function exibirMenu() {
-    console.clear();
-    console.log("====== SISTEMA BANCÁRIO ======");
-    console.log("============ MENU ============");
-    console.log("1 - Listar todos os clientes");
-    console.log("2 - Cadastrar um novo cliente");
-    console.log("3 - Buscar um cliente");
-    console.log("0 - Sair do sistema");
-    console.log("==============================");
-    console.log("");
-}
-
-function validarNome(nome) {
-    return /^[A-Za-z\s]+$/.test(nome);
-}
-
-function validarCPF(cpf) {
-    return /^[0-9]{11}$/.test(cpf);
-}
-
-function validarValor(valor) {
-    return !isNaN(valor) && valor > 0;
-}
-
-function excluirCliente(cpf) {
-    delete clientes[cpf];
-}
-
-function cadastrarCliente() {
-    console.clear();
-    console.log("=== CADASTRAR CLIENTE ===");
-    let nomeCliente = readline.question("Digite seu nome completo: ");
-
-    for (const cpf in clientes) { // cpf = indice 0, 1, 2 ...
-        const cliente = clientes[cpf];
-        if (cliente.nome === nomeCliente) {
-            console.log("Cliente com o mesmo nome já cadastrado.");
-            readline.keyInPause();
-            return;
-        }
-    }
-
-    while (!validarNome(nomeCliente)) {
-        console.log("Nome inválido. Use apenas letras e espaços.");
-        nomeCliente = readline.question("Digite seu nome completo: ");
-    }
-
-    let cpfCliente = readline.question("Digite seu CPF (11 dígitos numéricos): ");
-
-    for (let i = 0; i < clientes.length; i++) {
-        if (clientes[i] == cpfCliente) {
-            console.log("Cliente com o mesmo CPF já cadastrado.");
-            readline.keyInPause();
-            return;
-        }
-    }
-
-    while (!validarCPF(cpfCliente)) {
-        console.log("CPF inválido. Deve conter 11 dígitos numéricos.");
-        cpfCliente = readline.question("Digite seu CPF (11 dígitos numéricos): ");
-    }
-
-    let saldoCliente = parseFloat(readline.question("Digite o saldo que deseja depositar: "));
-
-    while (!validarValor(saldoCliente)) {
-        console.log("Saldo inválido. Deve ser um valor positivo.");
-        saldoCliente = parseFloat(readline.question("Digite o saldo que deseja depositar: "));
-    }
-
-    const novoCliente = new Cliente(nomeCliente, cpfCliente, saldoCliente);
-    clientes.push(novoCliente);
-    console.log("Cliente cadastrado com sucesso!");
-    readline.keyInPause();
-}
-
-function listarClientes() {
-    console.clear();
-    console.log("=== LISTAR CLIENTES ===");
-
-    let clienteIndex = 1;
-    const clientesListados = [];
-
-    for (const cpf in clientes) {
-        const cliente = clientes[cpf];
-        console.log(`${clienteIndex} - ${cliente.nome}`);
-        clientesListados.push(cliente);
-        clienteIndex++;
-    }
-
-    if (clientesListados.length === 0) {
-        console.log("Nenhum cliente cadastrado.");
-        readline.keyInPause();
-        return;
-    }
-
-    const escolha = readline.questionInt("Digite o número correspondente ao cliente para ver os detalhes (ou 0 para voltar): ");
-
-    if (escolha >= 1 && escolha <= clientesListados.length) {
-        const clienteSelecionado = clientesListados[escolha - 1];
-        exibirDetalhesCliente(clienteSelecionado);
-    } else if (escolha !== 0) {
-        console.log("Escolha inválida.");
-        readline.keyInPause();
+    exibirDados() {
+        console.log("=== DADOS DO CLIENTE ===");
+        console.log(`Nome: ${this.nome}`);
+        console.log(`CPF: ${this.formatarCPF()}`);
+        console.log(`Agência: ${this.agencia}`);
+        console.log(`Conta: ${this.conta}`);
+        console.log(`Saldo: R$ ${this.saldo.toFixed(2)}`);
+        console.log("=========================");
     }
 }
 
-function buscarCliente() {
-    console.clear("");
-    console.log("===== BUSCAR CLIENTE =====");
-    console.log("1 - Buscar pelo nome");
-    console.log("2 - Buscar pelo CPF");
-    console.log("0 - Voltar ao menu principal");
-    console.log("==========================");
-    console.log("");
-
-    const escolha = readline.questionInt("Escolha uma opção: ");
-
-    switch (escolha) {
-        case 1:
-            buscarPorNome();
-            break;
-        case 2:
-            buscarPorCPF();
-            break;
-        case 0:
-            break;
-        default:
-            console.log("Opção inválida.");
-            readline.keyInPause();
+class Banco {
+    constructor() {
+        this.clientes = [];
     }
-}
 
-function buscarPorNome() {
-    while (true) {
+    cadastrarCliente() {
         console.clear();
-        console.log("=== BUSCAR CLIENTE POR NOME ===");
-        const nomeBusca = readline.question("Digite o nome do cliente (ou 0 para voltar): ");
-        if (nomeBusca === '0') {
+        console.log("=== CADASTRAR CLIENTE ===");
+
+        const nomeCliente = obterNomeCliente();
+        if (!nomeCliente) return;
+
+        const cpfCliente = obterCPFCliente();
+        if (!cpfCliente) return;
+
+        const saldoCliente = obterSaldoCliente();
+        if (saldoCliente === null) return;
+
+        const novoCliente = new Cliente(nomeCliente, cpfCliente, saldoCliente);
+        this.clientes.push(novoCliente);
+        console.log("Cliente cadastrado com sucesso!");
+        readline.keyInPause();
+    }
+
+    listarClientes() {
+        console.clear();
+        console.log("=== LISTAR CLIENTES ===");
+
+        if (this.clientes.length === 0) {
+            console.log("Nenhum cliente cadastrado.");
+            readline.keyInPause();
             return;
         }
 
-        const clientesEncontrados = [];
+        let clienteIndex = 1;
+        for (const cliente of this.clientes) {
+            console.log(`${clienteIndex} - ${cliente.nome}`);
+            clienteIndex++;
+        }
 
-        for (const cliente of clientes) {
-            if (cliente.nome.toLowerCase().includes(nomeBusca.toLowerCase())) {
-                clientesEncontrados.push(cliente);
+        const escolha = readline.questionInt("Digite o número correspondente ao cliente para ver os detalhes (ou 0 para voltar): ");
+
+        if (escolha >= 1 && escolha <= this.clientes.length) {
+            const clienteSelecionado = this.clientes[escolha - 1];
+            exibirDetalhesCliente(clienteSelecionado, this.clientes);
+        } else if (escolha !== 0) {
+            console.log("Erro: Escolha inválida.");
+            readline.keyInPause();
+        }
+    }
+
+    buscarCliente() {
+        console.clear("");
+        console.log("===== BUSCAR CLIENTE =====");
+        console.log("1 - Buscar pelo nome");
+        console.log("2 - Buscar pelo CPF");
+        console.log("0 - Voltar ao menu principal");
+        console.log("==========================");
+        console.log("");
+
+        const escolha = readline.questionInt("Escolha uma opção: ");
+
+        switch (escolha) {
+            case 1:
+                this.buscarPorNome();
+                break;
+            case 2:
+                this.buscarPorCPF();
+                break;
+            case 0:
+                break;
+            default:
+                console.log("Erro: Opção inválida.");
+                readline.keyInPause();
+        }
+    }
+
+    buscarPorNome() {
+        while (true) {
+            console.clear();
+            console.log("=== BUSCAR CLIENTE POR NOME ===");
+            const nomeBusca = readline.question("Digite o nome do cliente (ou 0 para voltar): ");
+            if (nomeBusca === '0') {
+                return;
+            }
+
+            const clientesEncontrados = [];
+
+            for (const cliente of this.clientes) {
+                if (cliente.nome.toLowerCase().includes(nomeBusca.toLowerCase())) {
+                    clientesEncontrados.push(cliente);
+                }
+            }
+
+            if (clientesEncontrados.length === 0) {
+                console.log("Nenhum cliente encontrado com esse nome.");
+                readline.keyInPause();
+            } else {
+                console.log("Clientes encontrados:");
+                clientesEncontrados.forEach((cliente, index) => {
+                    console.log(`${index + 1} - ${cliente.nome}`);
+                });
+
+                const escolha = readline.questionInt("Digite o número correspondente ao cliente para ver os detalhes (ou 0 para voltar): ");
+                if (escolha >= 1 && escolha <= clientesEncontrados.length) {
+                    const clienteSelecionado = clientesEncontrados[escolha - 1];
+                    exibirDetalhesCliente(clienteSelecionado, this.clientes);
+                } else if (escolha === 0) {
+                    return;
+                } else {
+                    console.log("Erro: Escolha inválida.");
+                    readline.keyInPause();
+                }
             }
         }
+    }
 
-        if (clientesEncontrados.length === 0) {
-            console.log("Nenhum cliente encontrado com esse nome.");
-            readline.keyInPause();
-        } else {
-            console.log("Clientes encontrados:");
-            clientesEncontrados.forEach((cliente, index) => {
-                console.log(`${index + 1} - ${cliente.nome}`);
-            });
+    buscarPorCPF() {
+        while (true) {
+            console.clear();
+            console.log("=== BUSCAR CLIENTE POR CPF ===");
+            const cpfBusca = readline.question("Digite o CPF do cliente (11 dígitos numéricos, ou 0 para voltar): ");
 
-            const escolha = readline.questionInt("Digite o número correspondente ao cliente para ver os detalhes (ou 0 para voltar): ");
-            if (escolha >= 1 && escolha <= clientesEncontrados.length) {
-                const clienteSelecionado = clientesEncontrados[escolha - 1];
-                exibirDetalhesCliente(clienteSelecionado);
+            if (cpfBusca === '0') {
                 return;
-            } else if (escolha === 0) {
-                return;
+            }
+
+            if (validarCPF(cpfBusca)) {
+                const clienteEncontrado = this.clientes.find(cliente => cliente.cpf === cpfBusca);
+                if (clienteEncontrado) {
+                    clienteEncontrado.exibirDados();
+                    return;
+                } else {
+                    console.log("Erro: Nenhum cliente encontrado com esse CPF.");
+                    readline.keyInPause();
+                }
             } else {
-                console.log("Escolha inválida.");
+                console.log("Erro: CPF inválido.");
                 readline.keyInPause();
             }
         }
     }
 }
 
-function buscarPorCPF() {
-    while (true) {
-        console.clear();
-        console.log("=== BUSCAR CLIENTE POR CPF ===");
-        const cpfBusca = readline.question("Digite o CPF do cliente (11 dígitos numéricos, ou 0 para voltar): ");
-
-        if (cpfBusca === '0') {
-            return;
-        }
-
-        if (validarCPF(cpfBusca)) {
-            const clienteEncontrado = clientes.find(cliente => cliente.cpf === cpfBusca);
-            if (clienteEncontrado) {
-                exibirDetalhesCliente(clienteEncontrado);
-                return;
-            } else {
-                console.log("Nenhum cliente encontrado com esse CPF.");
-                readline.keyInPause();
-            }
-        } else {
-            console.log("CPF inválido.");
-            readline.keyInPause();
-        }
-    }
-}
-
-
-function exibirDetalhesCliente(clienteSelecionado) {
+function exibirDetalhesCliente(clienteSelecionado, clientes) {
     let continua = true;
     while (continua) {
         console.clear();
@@ -280,6 +234,7 @@ function exibirDetalhesCliente(clienteSelecionado) {
         let opcao = readline.questionInt("Escolha uma opção: ");
         switch (opcao) {
             case 1:
+                let atualizacaoNomeCpf = false;
                 while (true) {
                     console.clear();
                     console.log("=== ALTERAR CPF OU NOME ===");
@@ -298,16 +253,15 @@ function exibirDetalhesCliente(clienteSelecionado) {
                             let novoNome = readline.question("Digite o novo nome do Cliente: ");
                             clienteSelecionado.nome = novoNome;
                             console.log("Nome do cliente atualizado com sucesso!");
+                            atualizacaoNomeCpf = true;
                             readline.keyInPause();
                             break;
-                        default:
-                            console.log("Opção inválida!");
                         case 2:
                             let novoCPF = readline.question("Digite o novo CPF do Cliente: ");
 
                             for (let i = 0; i < clientes.length; i++) {
                                 if (clientes[i].cpf == novoCPF) {
-                                    console.log("Cliente com o mesmo CPF já cadastrado.");
+                                    console.log("Erro: Cliente com o mesmo CPF já cadastrado.");
                                     readline.keyInPause();
                                     break;
                                 }
@@ -315,14 +269,21 @@ function exibirDetalhesCliente(clienteSelecionado) {
 
                             clienteSelecionado.cpf = novoCPF;
                             console.log("CPF do cliente atualizado com sucesso!");
+                            atualizacaoNomeCpf = true;
                             readline.keyInPause();
                             break;
+                        default:
+                            console.log("Erro: Opção inválida!");
+                    }
+
+                    if (atualizacaoNomeCpf) {
+                        return;
                     }
                 }
             case 2:
                 let valorSaque = parseFloat(readline.question("Digite o valor a sacar: "));
                 while (!validarValor(valorSaque)) {
-                    console.log("Valor de saque inválido. Digite um número positivo.");
+                    console.log("Erro: Valor de saque inválido. Digite um número positivo.");
                     valorSaque = parseFloat(readline.question("Digite o valor a sacar: "));
                 }
                 clienteSelecionado.sacar(valorSaque);
@@ -331,7 +292,7 @@ function exibirDetalhesCliente(clienteSelecionado) {
             case 3:
                 let valorDeposito = parseFloat(readline.question("Digite o valor a depositar: "));
                 while (!validarValor(valorDeposito)) {
-                    console.log("Valor de depósito inválido. Digite um número positivo.");
+                    console.log("Erro: Valor de depósito inválido. Digite um número positivo.");
                     valorDeposito = parseFloat(readline.question("Digite o valor a depositar: "));
                 }
                 clienteSelecionado.depositar(valorDeposito);
@@ -350,44 +311,106 @@ function exibirDetalhesCliente(clienteSelecionado) {
                     continua = false;
                 }
                 break;
+
             case 0:
                 continua = false;
                 break;
             default:
-                console.log("Opção inválida!");
+                console.log("Erro: Opção inválida!");
         }
     }
 }
 
+function excluirCliente(cpf) {
+    const indice = banco.clientes.findIndex(cliente => cliente.cpf === cpf);
+    if (indice !== -1) {
+        // Remova o cliente da lista de clientes
+        banco.clientes.splice(indice, 1);
+    }
+}
 
 function confirmarExclusao() {
     const confirmacao = readline.keyInYN("Tem certeza de que deseja excluir o cliente? (S/N): ");
     return confirmacao;
 }
 
-function main() {
-    let loop = true;
-    while (loop) {
-        exibirMenu();
-        let opcao = readline.questionInt("Escolha uma opção: ");
-        switch (opcao) {
-            case 1:
-                listarClientes();
-                break;
-            case 2:
-                cadastrarCliente();
-                break;
-            case 3:
-                buscarCliente();
-                break;
-            case 0:
-                console.log("Saindo do sistema...");
-                loop = false;
-                break;
-            default:
-                console.log("Opção inválida!");
-        }
+function validarValor(valor) {
+    return !isNaN(valor) && valor > 0;
+}
+
+function validarCPF(cpf) {
+    return /^[0-9]{11}$/.test(cpf);
+}
+
+function obterNomeCliente() {
+    const nome = readline.question("Digite o nome do cliente: ");
+    if (validarNome(nome)) {
+        return nome;
+    } else {
+        console.log("Erro: Nome inválido.");
+        readline.keyInPause();
+        return null;
     }
 }
 
-main();
+function obterCPFCliente() {
+    const cpf = readline.question("Digite o CPF do cliente (11 dígitos numéricos): ");
+    if (validarCPF(cpf)) {
+        return cpf;
+    } else {
+        console.log("Erro: CPF inválido.");
+        readline.keyInPause();
+        return null;
+    }
+}
+
+function obterSaldoCliente() {
+    const saldo = parseFloat(readline.question("Digite o saldo inicial do cliente: "));
+    if (!isNaN(saldo) && saldo >= 0) {
+        return saldo;
+    } else {
+        console.log("Erro: Saldo inválido.");
+        readline.keyInPause();
+        return null;
+    }
+}
+
+function validarNome(nome) {
+    return /^[A-Za-z\s]+$/.test(nome);
+}
+
+const banco = new Banco();
+
+while (true) {
+    exibirMenu();
+    const opcao = readline.questionInt("Escolha uma opção: ");
+
+    switch (opcao) {
+        case 1:
+            banco.cadastrarCliente();
+            break;
+        case 2:
+            banco.listarClientes();
+            break;
+        case 3:
+            banco.buscarCliente();
+            break;
+        case 0:
+            console.log("Encerrando o programa.");
+            return;
+        default:
+            console.log("Erro: Opção inválida.");
+            readline.keyInPause();
+    }
+}
+
+function exibirMenu() {
+    console.clear();
+    console.log("===== SISTEMA BANCÁRIO =====");
+    console.log("1 - Cadastrar Novo Cliente");
+    console.log("2 - Listar Clientes");
+    console.log("3 - Buscar Cliente");
+    console.log("0 - Sair");
+    console.log("============================");
+    console.log("");
+}
