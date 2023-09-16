@@ -57,14 +57,14 @@ const clientes = [];
 
 function exibirMenu() {
     console.clear();
-    console.log("==== SISTEMA BANCÁRIO ====");
-    console.log("========== MENU ==========");
+    console.log("====== SISTEMA BANCÁRIO ======");
+    console.log("============ MENU ============");
     console.log("1 - Listar todos os clientes");
     console.log("2 - Cadastrar um novo cliente");
     console.log("3 - Buscar um cliente");
     console.log("0 - Sair do sistema");
-    console.log("==========================");
-    console.log();
+    console.log("==============================");
+    console.log("");
 }
 
 function validarNome(nome) {
@@ -162,13 +162,13 @@ function listarClientes() {
 }
 
 function buscarCliente() {
-    console.clear();
+    console.clear("");
     console.log("===== BUSCAR CLIENTE =====");
     console.log("1 - Buscar pelo nome");
     console.log("2 - Buscar pelo CPF");
     console.log("0 - Voltar ao menu principal");
     console.log("==========================");
-    console.log();
+    console.log("");
 
     const escolha = readline.questionInt("Escolha uma opção: ");
 
@@ -188,56 +188,72 @@ function buscarCliente() {
 }
 
 function buscarPorNome() {
-    console.clear();
-    console.log("=== BUSCAR CLIENTE POR NOME ===");
-    const nomeBusca = readline.question("Digite o nome do cliente: ");
-    const clientesEncontrados = [];
-
-    for (const cpf in clientes) {
-        const cliente = clientes[cpf];
-        if (cliente.nome.toLowerCase().includes(nomeBusca.toLowerCase())) {
-            clientesEncontrados.push(cliente);
+    while (true) {
+        console.clear();
+        console.log("=== BUSCAR CLIENTE POR NOME ===");
+        const nomeBusca = readline.question("Digite o nome do cliente (ou 0 para voltar): ");
+        if (nomeBusca === '0') {
+            return;
         }
-    }
 
-    if (clientesEncontrados.length === 0) {
-        console.log("Nenhum cliente encontrado com esse nome.");
-    } else {
-        console.log("Clientes encontrados:");
-        clientesEncontrados.forEach((cliente, index) => {
-            console.log(`${index + 1} - ${cliente.nome}`);
-        });
-        const escolha = readline.questionInt("Digite o número correspondente ao cliente para ver os detalhes (ou 0 para voltar): ");
-        if (escolha >= 1 && escolha <= clientesEncontrados.length) {
-            const clienteSelecionado = clientesEncontrados[escolha - 1];
-            exibirDetalhesCliente(clienteSelecionado);
-        } else if (escolha !== 0) {
-            console.log("Escolha inválida.");
+        const clientesEncontrados = [];
+
+        for (const cliente of clientes) {
+            if (cliente.nome.toLowerCase().includes(nomeBusca.toLowerCase())) {
+                clientesEncontrados.push(cliente);
+            }
+        }
+
+        if (clientesEncontrados.length === 0) {
+            console.log("Nenhum cliente encontrado com esse nome.");
             readline.keyInPause();
+        } else {
+            console.log("Clientes encontrados:");
+            clientesEncontrados.forEach((cliente, index) => {
+                console.log(`${index + 1} - ${cliente.nome}`);
+            });
+
+            const escolha = readline.questionInt("Digite o número correspondente ao cliente para ver os detalhes (ou 0 para voltar): ");
+            if (escolha >= 1 && escolha <= clientesEncontrados.length) {
+                const clienteSelecionado = clientesEncontrados[escolha - 1];
+                exibirDetalhesCliente(clienteSelecionado);
+                return;
+            } else if (escolha === 0) {
+                return;
+            } else {
+                console.log("Escolha inválida.");
+                readline.keyInPause();
+            }
         }
     }
 }
 
 function buscarPorCPF() {
-    console.clear();
-    console.log("=== BUSCAR CLIENTE POR CPF ===");
-    const cpfBusca = readline.question("Digite o CPF do cliente (11 dígitos numéricos): ");
-    if (validarCPF(cpfBusca)) {
-        for (let i = 0; i < clientes.length; i++) {
-            if (clientes[i].cpf == cpfBusca) {
-                const clienteEncontrado = clientes[i];
-                if (clienteEncontrado) {
-                    exibirDetalhesCliente(clienteEncontrado);
-                } else {
-                    console.log("Nenhum cliente encontrado com esse CPF.");
-                }
-            }
+    while (true) {
+        console.clear();
+        console.log("=== BUSCAR CLIENTE POR CPF ===");
+        const cpfBusca = readline.question("Digite o CPF do cliente (11 dígitos numéricos, ou 0 para voltar): ");
+
+        if (cpfBusca === '0') {
+            return;
         }
-    } else {
-        console.log("CPF inválido.");
+
+        if (validarCPF(cpfBusca)) {
+            const clienteEncontrado = clientes.find(cliente => cliente.cpf === cpfBusca);
+            if (clienteEncontrado) {
+                exibirDetalhesCliente(clienteEncontrado);
+                return;
+            } else {
+                console.log("Nenhum cliente encontrado com esse CPF.");
+                readline.keyInPause();
+            }
+        } else {
+            console.log("CPF inválido.");
+            readline.keyInPause();
+        }
     }
-    readline.keyInPause();
 }
+
 
 function exibirDetalhesCliente(clienteSelecionado) {
     let continua = true;
@@ -249,37 +265,60 @@ function exibirDetalhesCliente(clienteSelecionado) {
         console.log(`Agência: ${clienteSelecionado.agencia}`);
         console.log(`Conta: ${clienteSelecionado.conta}`);
         console.log(`Saldo: R$ ${clienteSelecionado.saldo.toFixed(2)}`);
-        console.log("============================");
+        console.log("===========================");
+        console.log("");
         console.log("Opções:");
-        console.log("1 - Alterar Cadastro");
+        console.log("1 - Alterar CPF ou Nome");
         console.log("2 - Sacar Dinheiro");
         console.log("3 - Depositar Dinheiro");
         console.log("4 - Ver Registro de Alterações");
         console.log("5 - Excluir Cliente");
-        console.log("6 - Voltar ao menu principal");
+        console.log("0 - Voltar ao menu principal");
+        console.log("===========================");
         console.log("");
 
         let opcao = readline.questionInt("Escolha uma opção: ");
         switch (opcao) {
             case 1:
-                let novoCPF = readline.question("Digite o novo CPF do Cliente: ");
-                // novoCPF = clienteSelecionado.formatarCPF();
-                // console.log(novoCPF);
-                for (let i = 0; i < clientes.length; i++) {
-                    if (clientes[i].cpf == novoCPF) {
-                        console.log("Cliente com o mesmo CPF já cadastrado.");
-                        readline.keyInPause();
-                        break;
+                while (true) {
+                    console.clear();
+                    console.log("=== ALTERAR CPF OU NOME ===");
+                    console.log("1 - Alterar Nome");
+                    console.log("2 - Alterar CPF");
+                    console.log("0 - Voltar ao menu anterior");
+                    console.log("===========================");
+                    console.log();
+
+                    const escolha = readline.questionInt("Escolha uma opção: ");
+
+                    switch (escolha) {
+                        case 0:
+                            return;
+                        case 1:
+                            let novoNome = readline.question("Digite o novo nome do Cliente: ");
+                            clienteSelecionado.nome = novoNome;
+                            console.log("Nome do cliente atualizado com sucesso!");
+                            readline.keyInPause();
+                            break;
+                        default:
+                            console.log("Opção inválida!");
+                        case 2:
+                            let novoCPF = readline.question("Digite o novo CPF do Cliente: ");
+
+                            for (let i = 0; i < clientes.length; i++) {
+                                if (clientes[i].cpf == novoCPF) {
+                                    console.log("Cliente com o mesmo CPF já cadastrado.");
+                                    readline.keyInPause();
+                                    break;
+                                }
+                            }
+
+                            clienteSelecionado.cpf = novoCPF;
+                            console.log("CPF do cliente atualizado com sucesso!");
+                            readline.keyInPause();
+                            break;
                     }
                 }
-
-                let novoNome = readline.question("Digite o novo nome do Cliente: ");
-                clienteSelecionado.cpf = novoCPF;
-                console.log(clienteSelecionado.cpf);
-                clienteSelecionado.nome = novoNome;
-                console.log("Informações do cliente atualizadas com sucesso!");
-                readline.keyInPause();
-                break;
             case 2:
                 let valorSaque = parseFloat(readline.question("Digite o valor a sacar: "));
                 while (!validarValor(valorSaque)) {
@@ -311,7 +350,7 @@ function exibirDetalhesCliente(clienteSelecionado) {
                     continua = false;
                 }
                 break;
-            case 6:
+            case 0:
                 continua = false;
                 break;
             default:
@@ -319,6 +358,7 @@ function exibirDetalhesCliente(clienteSelecionado) {
         }
     }
 }
+
 
 function confirmarExclusao() {
     const confirmacao = readline.keyInYN("Tem certeza de que deseja excluir o cliente? (S/N): ");

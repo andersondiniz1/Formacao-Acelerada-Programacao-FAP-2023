@@ -64,6 +64,7 @@ function exibirMenu() {
   console.log("3 - Buscar um cliente");
   console.log("0 - Sair do sistema");
   console.log("==========================");
+  console.log();
 }
 
 function validarNome(nome) {
@@ -87,13 +88,12 @@ function cadastrarCliente() {
   console.log("=== CADASTRAR CLIENTE ===");
   let nomeCliente = readline.question("Digite seu nome completo: ");
 
-  // Verifica se o nome já existe na lista de clientes
   for (const cpf in clientes) {
     const cliente = clientes[cpf];
     if (cliente.nome === nomeCliente) {
       console.log("Cliente com o mesmo nome já cadastrado.");
       readline.keyInPause();
-      return; // Sai da função sem cadastrar o cliente
+      return;
     }
   }
 
@@ -104,11 +104,10 @@ function cadastrarCliente() {
 
   let cpfCliente = readline.question("Digite seu CPF (11 dígitos numéricos): ");
 
-  // Verifica se o CPF já existe na lista de clientes
   if (clientes[cpfCliente]) {
     console.log("Cliente com o mesmo CPF já cadastrado.");
     readline.keyInPause();
-    return; // Sai da função sem cadastrar o cliente
+    return;
   }
 
   while (!validarCPF(cpfCliente)) {
@@ -152,15 +151,89 @@ function listarClientes() {
   const escolha = readline.questionInt("Digite o número correspondente ao cliente para ver os detalhes (ou 0 para voltar): ");
 
   if (escolha >= 1 && escolha <= clientesListados.length) {
-    // Redireciona para a função buscarCliente com o cliente selecionado.
-    buscarCliente(clientesListados[escolha - 1]);
+    const clienteSelecionado = clientesListados[escolha - 1];
+    exibirDetalhesCliente(clienteSelecionado);
   } else if (escolha !== 0) {
     console.log("Escolha inválida.");
     readline.keyInPause();
   }
 }
 
-function buscarCliente(clienteSelecionado) {
+function buscarCliente() {
+  console.clear();
+  console.log("=== BUSCAR CLIENTE ===");
+  console.log("1 - Buscar pelo nome");
+  console.log("2 - Buscar pelo CPF");
+  console.log("0 - Voltar ao menu principal");
+  console.log("==========================");
+  console.log();
+
+  const escolha = readline.questionInt("Escolha uma opção: ");
+
+  switch (escolha) {
+    case 1:
+      buscarPorNome();
+      break;
+    case 2:
+      buscarPorCPF();
+      break;
+    case 0:
+      break;
+    default:
+      console.log("Opção inválida.");
+      readline.keyInPause();
+  }
+}
+
+function buscarPorNome() {
+  console.clear();
+  console.log("=== BUSCAR CLIENTE POR NOME ===");
+  const nomeBusca = readline.question("Digite o nome do cliente: ");
+  const clientesEncontrados = [];
+
+  for (const cpf in clientes) {
+    const cliente = clientes[cpf];
+    if (cliente.nome.toLowerCase().includes(nomeBusca.toLowerCase())) {
+      clientesEncontrados.push(cliente);
+    }
+  }
+
+  if (clientesEncontrados.length === 0) {
+    console.log("Nenhum cliente encontrado com esse nome.");
+  } else {
+    console.log("Clientes encontrados:");
+    clientesEncontrados.forEach((cliente, index) => {
+      console.log(`${index + 1} - ${cliente.nome}`);
+    });
+    const escolha = readline.questionInt("Digite o número correspondente ao cliente para ver os detalhes (ou 0 para voltar): ");
+    if (escolha >= 1 && escolha <= clientesEncontrados.length) {
+      const clienteSelecionado = clientesEncontrados[escolha - 1];
+      exibirDetalhesCliente(clienteSelecionado);
+    } else if (escolha !== 0) {
+      console.log("Escolha inválida.");
+      readline.keyInPause();
+    }
+  }
+}
+
+function buscarPorCPF() {
+  console.clear();
+  console.log("=== BUSCAR CLIENTE POR CPF ===");
+  const cpfBusca = readline.question("Digite o CPF do cliente (11 dígitos numéricos): ");
+  if (validarCPF(cpfBusca)) {
+    const clienteEncontrado = clientes[cpfBusca];
+    if (clienteEncontrado) {
+      exibirDetalhesCliente(clienteEncontrado);
+    } else {
+      console.log("Nenhum cliente encontrado com esse CPF.");
+    }
+  } else {
+    console.log("CPF inválido.");
+  }
+  readline.keyInPause();
+}
+
+function exibirDetalhesCliente(clienteSelecionado) {
   let continua = true;
   while (continua) {
     console.clear();
@@ -169,7 +242,7 @@ function buscarCliente(clienteSelecionado) {
     console.log(`CPF: ${clienteSelecionado.formatarCPF()}`);
     console.log(`Agência: ${clienteSelecionado.agencia}`);
     console.log(`Conta: ${clienteSelecionado.conta}`);
-    console.log(`Saldo: R$ ${clienteSelecionado.saldo.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+    console.log(`Saldo: R$ ${clienteSelecionado.saldo.toFixed(2)}`);
     console.log("============================");
     console.log("Opções:");
     console.log("1 - Sacar Dinheiro");
@@ -199,12 +272,7 @@ function buscarCliente(clienteSelecionado) {
         readline.keyInPause();
         break;
       case 3:
-        console.clear();
-        console.log("=== REGISTRO DE ALTERAÇÕES ===");
-        for (const transacao of clienteSelecionado.transacoes) {
-          console.log(transacao);
-        }
-        console.log("===============================");
+        clienteSelecionado.listarTransacoes();
         readline.keyInPause();
         break;
       case 4:
@@ -243,7 +311,7 @@ function main() {
         cadastrarCliente();
         break;
       case 3:
-        listarClientes();
+        buscarCliente();
         break;
       case 0:
         console.log("Saindo do sistema...");
