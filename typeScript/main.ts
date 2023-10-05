@@ -81,20 +81,175 @@
   // const minhaLista = [1, 2, 3, "quatro", "cinco"];
   // imprimirLista(minhaLista);
   
-  // Escreva uma função chamada calcularMedia que receba um array de números como parâmetro e calcule a média desses números. Não é necessário exibir o resultado, apenas retorne o valor da média.
-  function calcularMedia(numeros: number[]): number {
-    if (numeros.length === 0) return 0;
+  // // Escreva uma função chamada calcularMedia que receba um array de números como parâmetro e calcule a média desses números. Não é necessário exibir o resultado, apenas retorne o valor da média.
+  // function calcularMedia(numeros: number[]): number {
+  //   if (numeros.length === 0) return 0;
   
-    let soma = 0;
-    for (const numero of numeros) {
-      soma += numero;
-    }
+  //   let soma = 0;
+  //   for (const numero of numeros) {
+  //     soma += numero;
+  //   }
   
-    const media = soma / numeros.length;
-    return media;
+  //   const media = soma / numeros.length;
+  //   return media;
+  // }
+  // const numeros = [10, 20, 30, 40, 50];
+  // const media = calcularMedia(numeros);
+  // console.log(`A média é: ${media}`);
+  
+  // crie em typescript uma classe pessoa com os atributos nome, idade e email.
+  // class Pessoa {
+  //   nome: string;
+  //   idade: number;
+  //   email: string;
+  
+  //   constructor(nome: string, idade: number, email: string) {
+  //     this.nome = nome;
+  //     this.idade = idade;
+  //     this.email = email;
+  //   }
+  // }
+  
+  // class Aluno extends Pessoa {
+  //   matricula: string;
+  
+  //   constructor(nome: string, idade: number, email: string, matricula: string) {
+  //     super(nome, idade, email);
+  //     this.matricula = matricula;
+  //   }
+  // }
+  // // Exemplo de uso da classe Aluno
+  // const aluno1 = new Aluno("Maria", 25, "maria@email.com", "12345");
+  // console.log(`Nome: ${aluno1.nome}, Idade: ${aluno1.idade}, Email: ${aluno1.email}, Matrícula: ${aluno1.matricula}`);
+  
+  // crie uma classe retangulo com os atributos largura e altura e metodos para calcular a area e o perimetro
+  // class Retangulo {
+  //   largura: number;
+  //   altura: number;
+  
+  //   constructor(largura: number, altura: number) {
+  //     this.largura = largura;
+  //     this.altura = altura;
+  //   }
+  
+  //   calcularArea(): number {
+  //     return this.largura * this.altura;
+  //   }
+  
+  //   calcularPerimetro(): number {
+  //     return 2 * (this.largura + this.altura);
+  //   }
+  // }
+  
+  // // Exemplo de uso da classe Retangulo
+  // const retangulo1 = new Retangulo(5, 10);
+  // console.log(`Largura: ${retangulo1.largura}, Altura: ${retangulo1.altura}`);
+  // console.log(`Área: ${retangulo1.calcularArea()}`);
+  // console.log(`Perímetro: ${retangulo1.calcularPerimetro()}`);
+
+
+  // // crie uma classe contaBancaria com os atributos saldo e numeroConta e métodos para depositar, sacar e verificar o saldo
+  // class ContaBancaria {
+  //   saldo: number;
+  //   numeroConta: string;
+  
+  //   constructor(numeroConta: string, saldoInicial: number = 0) {
+  //     this.numeroConta = numeroConta;
+  //     this.saldo = saldoInicial;
+  //   }
+  
+  //   depositar(valor: number): void {
+  //     if (valor > 0) {
+  //       this.saldo += valor;
+  //       console.log(`Depósito de ${valor} realizado com sucesso.`);
+  //     } else {
+  //       console.log('O valor do depósito deve ser maior que zero.');
+  //     }
+  //   }
+  
+  //   sacar(valor: number): void {
+  //     if (valor > 0 && this.saldo >= valor) {
+  //       this.saldo -= valor;
+  //       console.log(`Saque de ${valor} realizado com sucesso.`);
+  //     } else if (valor <= 0) {
+  //       console.log('O valor do saque deve ser maior que zero.');
+  //     } else {
+  //       console.log('Saldo insuficiente para realizar o saque.');
+  //     }
+  //   }
+  
+  //   verificarSaldo(): number {
+  //     return this.saldo;
+  //   }
+  // }
+  
+  // // Exemplo de uso da classe ContaBancaria
+  // const conta1 = new ContaBancaria("12345");
+  // console.log(`Número da Conta: ${conta1.numeroConta}`);
+  // console.log(`Saldo Inicial: ${conta1.verificarSaldo()}`);
+  
+  // conta1.depositar(1000);
+  // console.log(`Saldo após depósito: ${conta1.verificarSaldo()}`);
+  
+  // conta1.sacar(500);
+  // console.log(`Saldo após saque: ${conta1.verificarSaldo()}`);
+  
+  // Crie uma classe Produto com os atributos nome, preco e quantidade e métodos para calcular o valor total (preço * quantidade).
+  // class Produto {
+  //   nome: string;
+  //   preco: number;
+  //   quantidade: number;
+  
+  //   constructor(nome: string, preco: number, quantidade: number) {
+  //     this.nome = nome;
+  //     this.preco = preco;
+  //     this.quantidade = quantidade;
+  //   }
+  
+  //   calcularValorTotal(): number {
+  //     return this.preco * this.quantidade;
+  //   }
+  // }
+  
+  // // Exemplo de uso da classe Produto
+  // const produto1 = new Produto("Camiseta", 25.0, 3);
+  // console.log(`Nome do Produto: ${produto1.nome}`);
+  // console.log(`Preço do Produto: R$ ${produto1.preco}`);
+  // console.log(`Quantidade em Estoque: ${produto1.quantidade}`);
+  // console.log(`Valor Total em Estoque: R$ ${produto1.calcularValorTotal()}`);
+
+  
+// Crie uma classe chamada Invoice que possa ser utilizado por uma loja de suprimentos
+// de informática para representar uma fatura de um item vendido na loja. Uma fatura deve incluir as seguintes informações como atributos:
+// o número do item faturado,
+// a descrição do item,
+// a quantidade comprada do item e
+// o preço unitário do item.
+class Invoice {
+  numeroItem: string;
+  descricaoItem: string;
+  quantidadeComprada: number;
+  precoUnitario: number;
+
+  constructor(numeroItem: string, descricaoItem: string, quantidadeComprada: number, precoUnitario: number) {
+    this.numeroItem = numeroItem;
+    this.descricaoItem = descricaoItem;
+    this.quantidadeComprada = quantidadeComprada;
+    this.precoUnitario = precoUnitario;
   }
-  const numeros = [10, 20, 30, 40, 50];
-  const media = calcularMedia(numeros);
-  console.log(`A média é: ${media}`);
+
+  calcularValorTotal(): number {
+    return this.quantidadeComprada * this.precoUnitario;
+  }
+}
+
+// Exemplo de uso da classe Invoice
+const fatura1 = new Invoice("001", "Teclado mecânico", 2, 49.99);
+console.log(`Número do Item: ${fatura1.numeroItem}`);
+console.log(`Descrição do Item: ${fatura1.descricaoItem}`);
+console.log(`Quantidade Comprada: ${fatura1.quantidadeComprada}`);
+console.log(`Preço Unitário: R$ ${fatura1.precoUnitario.toFixed(2)}`);
+console.log(`Valor Total: R$ ${fatura1.calcularValorTotal().toFixed(2)}`);
+
   
   
